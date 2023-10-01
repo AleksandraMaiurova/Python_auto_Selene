@@ -18,7 +18,7 @@ def test_demoqa_form(size):
     browser.element('[for="hobbies-checkbox-1"]').click()
     browser.element('[for="hobbies-checkbox-2"]').click()
     browser.element('[for="hobbies-checkbox-2"]').click()
-    browser.element('#uploadPicture').send_keys(os.path.abspath('vbUrzS0RtIg.jpg'))
+    browser.element('#uploadPicture').send_keys(os.path.abspath('tests/vbUrzS0RtIg.jpg'))
     browser.element('#currentAddress').type('This is my address where I can cry if I wanna')
     browser.element('[id="react-select-3-input"]').type('Uttar Pradesh').press_enter()
     browser.element('[id="react-select-4-input"]').type('Agra').press_enter()
