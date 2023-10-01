@@ -25,4 +25,15 @@ def test_demoqa_form(size):
     browser.element('#close-fixedban').click()
     browser.element('[id="submit"]').click()
     browser.element('#example-modal-sizes-title-lg').should(have.text('Thanks for submitting the form'))
+    browser.element('.table').all('td:nth-of-type(2)').should(have.texts(
+        'Aleksandra Maiurova',
+        'asmaiurova@itmo.ru',
+        'Female',
+        '1234567899',
+        '13 July,1993',
+        'English',
+        'Sports',
+        'vbUrzS0RtIg.jpg',
+        'This is my address where I can cry if I wanna',
+        'Uttar Pradesh Agra'))
 
