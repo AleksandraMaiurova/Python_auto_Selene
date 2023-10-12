@@ -5,8 +5,8 @@ from selene import be, have
 
 def test_google(size):
     browser.open('https://google.com')
-    browser.element('[name="q"]').should(be.blank).type('yashaka/selene').press_enter()
-    browser.element('[id="search"]').should(have.text('User-oriented Web UI browser tests in Python'))
+    browser.element('[name="q"]').should(be.blank).type('Tom Hardy').press_enter()
+    browser.element('[id="search"]').should(have.text('Edward Thomas "Tom" Hardy'))
 
 
 def test_google_no_result(size):
