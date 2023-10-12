@@ -1,5 +1,10 @@
 import pytest
 from selene.support.shared import browser
+import shutil
+import os
+import zipfile
+from utils import TMP_PATH
+
 
 
 @pytest.fixture (scope="function")
@@ -10,3 +15,11 @@ def size():
     browser.config.window_width = 400
     yield
     browser.quit()
+
+
+@pytest.fixture(scope="function")
+def archive_maker():
+    if not os.path.exists(TMP_PATH):
+        os.mkdir('tmp')
+        yield
+        shutil.rmtree(TMP_PATH)
