@@ -2,9 +2,7 @@ import pytest
 from selene.support.shared import browser
 import shutil
 import os
-import zipfile
 from utils import TMP_PATH
-
 
 
 @pytest.fixture (scope="function")
@@ -17,9 +15,11 @@ def size():
     browser.quit()
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="session")
 def archive_maker():
-    if not os.path.exists(TMP_PATH):
-        os.mkdir('tmp')
-        yield
+    if os.path.exists(TMP_PATH):
         shutil.rmtree(TMP_PATH)
+    else:
+        os.mkdir('tmp')
+    yield
+    shutil.rmtree(TMP_PATH, ignore_errors=True)

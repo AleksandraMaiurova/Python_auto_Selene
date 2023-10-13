@@ -1,6 +1,6 @@
 from zipfile import ZipFile
 import os
-from utils import XLSX_PATH, XLS_PATH, TXT_PATH, PDF_PATH
+from utils import XLSX_PATH, XLS_PATH, TXT_PATH, PDF_PATH, PROJECT_ROOT_PATH, TMP_PATH
 
 
 def test_we_have_pdf(archive_maker):
