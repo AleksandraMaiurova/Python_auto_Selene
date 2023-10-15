@@ -15,11 +15,3 @@ def size():
     browser.quit()
 
 
-@pytest.fixture(scope="session")
-def archive_maker():
-    if os.path.exists(TMP_PATH):
-        shutil.rmtree(TMP_PATH)
-    else:
-        os.mkdir('tmp')
-    yield
-    shutil.rmtree(TMP_PATH, ignore_errors=True)
