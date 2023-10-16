@@ -1,4 +1,3 @@
-import pytest
 import allure
 from selene.support import by
 from selene.support.conditions import be
