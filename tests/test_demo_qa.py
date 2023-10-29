@@ -1,39 +1,39 @@
-from selene import browser, have, command
-import os
+from helpers.commons import RegistrationPage
+import allure
+
+reg_page = RegistrationPage()
 
 
-def test_demoqa_form(size):
-    browser.open('/automation-practice-form')
-    browser.element('#firstName').type('Aleksandra')
-    browser.element('#lastName').type('Maiurova')
-    browser.element('#userEmail').type('asmaiurova@itmo.ru')
-    browser.element('[for="gender-radio-2"]').click()
-    browser.element('#userNumber').type('1234567899')
-    browser.element('#dateOfBirthInput').click()
-    browser.element(".react-datepicker__month-select").click().element('option[value="6"]').click()
-    browser.element(".react-datepicker__year-select").click().element('[value="1993"]').click()
-    browser.element(".react-datepicker__day--013").click()
-    browser.element('#subjectsInput').type('english').press_enter()
-    browser.element('[id="react-select-3-input"]').perform(command.js.scroll_into_view)
-    browser.element('[for="hobbies-checkbox-1"]').click()
-    browser.element('[for="hobbies-checkbox-2"]').click()
-    browser.element('[for="hobbies-checkbox-2"]').click()
-    browser.element('#uploadPicture').send_keys(os.path.abspath('tests/vbUrzS0RtIg.jpg'))
-    browser.element('#currentAddress').type('This is my address where I can cry if I wanna')
-    browser.element('[id="react-select-3-input"]').type('Uttar Pradesh').press_enter()
-    browser.element('[id="react-select-4-input"]').type('Agra').press_enter()
-    browser.element('#close-fixedban').click()
-    browser.element('[id="submit"]').click()
-    browser.element('#example-modal-sizes-title-lg').should(have.text('Thanks for submitting the form'))
-    browser.element('.table').all('td:nth-of-type(2)').should(have.texts(
-        'Aleksandra Maiurova',
-        'asmaiurova@itmo.ru',
-        'Female',
-        '1234567899',
-        '13 July,1993',
-        'English',
-        'Sports',
-        'vbUrzS0RtIg.jpg',
-        'This is my address where I can cry if I wanna',
-        'Uttar Pradesh Agra'))
+@allure.story('Registration form')
+@allure.title('Filling registration form')
+@allure.tag('UI')
+def test_qa_form():
+    with allure.step('Opening browser page'):
+        reg_page.open_page()
 
+    with allure.step('Filling registration form'):
+        reg_page.first_name('Aleksandra')
+        reg_page.last_name('Maiurova')
+        reg_page.email('asmaiurova@itmo.ru')
+        reg_page.gender('Female')
+        reg_page.phone_number('1234567899')
+        reg_page.birthdate(year=1993, month=6, day=13)
+        reg_page.subjects('English', 'Physics')
+        reg_page.hobbies(sports='sports', reading='reading')
+        reg_page.upload_photo(photo='vbUrzS0RtIg.jpg')
+        reg_page.current_address('This is my address where I can cry if I wanna')
+        reg_page.state('Uttar Pradesh')
+        reg_page.city('Agra')
+        reg_page.submit()
+
+    with allure.step('Check result'):
+        reg_page.should_have_inside('Aleksandra Maiurova',
+                                    'asmaiurova@itmo.ru',
+                                    'Female',
+                                    '1234567899',
+                                    'English, Physics',
+                                    '13 July,1993',
+                                    'vbUrzS0RtIg.jpg',
+                                    'This is my address where I can cry if I wanna',
+                                    'Uttar Pradesh Agra',
+                                    'Sports, Reading')
