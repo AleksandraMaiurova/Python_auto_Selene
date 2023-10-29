@@ -1,6 +1,7 @@
 from selene import be, have
 from selene.support.shared import browser
 from pathlib import Path
+from helpers.users.users import User
 
 
 def path_name(photo):
@@ -10,63 +11,37 @@ def path_name(photo):
 class RegistrationPage:
 
     def open_page(self):
-        return browser.open('https://demoqa.com/automation-practice-form')
+        browser.open('https://demoqa.com/automation-practice-form')
+        return self
 
-    def first_name(self, name):
-        return browser.element('#firstName').should(be.blank).type(f'{name}')
-
-    def last_name(self, lastname):
-        return browser.element('#lastName').type(f'{lastname}')
-
-    def email(self, email):
-        return browser.element('#userEmail').type(f'{email}')
-
-    def gender(self, gender):
-        return browser.element('[for="gender-radio-2"]').should(have.text(f'{gender}')).click()
-
-    def phone_number(self, phone_number):
-        return browser.element('#userNumber').type(f'{phone_number}')
-
-    def birthdate(self, year, month, day):
+    def registration_form(self, user: User):
+        browser.element('#firstName').should(be.blank).type(user.first_name)
+        browser.element('#lastName').type(user.last_name)
+        browser.element('#userEmail').type(user.email)
+        browser.all('.custom-radio').element_by(have.text(user.gender)).click()
+        browser.element('#userNumber').type(user.phone)
         browser.element('#dateOfBirthInput').click()
-        browser.element('.react-datepicker__year-select').click().element(f'option[value="{year}"]').click()
-        browser.element('.react-datepicker__month-select').click().element(f'option[value="{month}"]').click()
-        browser.element(f'.react-datepicker__day--0{day}').click()
-
-    def subjects(self, first_subj, second_subj):
-        return browser.element('#subjectsInput').type(f'{first_subj}').press_enter().type(
-            f'{second_subj}').press_enter()
-
-    def hobbies(self, sports, music=None, reading=None):
-        if sports == 'sports':
-            browser.element('label[for="hobbies-checkbox-1"]').click()
-        if music == 'music':
-            browser.element('label[for="hobbies-checkbox-3"]').click()
-        if reading == 'reading':
-            browser.element('label[for="hobbies-checkbox-2"]').click()
-
-    def upload_photo(self, photo):
-        browser.element('#uploadPicture').set_value(path_name(photo))
-
-    def current_address(self, address):
-        browser.element('#currentAddress').type(f'{address}').press_enter()
-
-    def state(self, state):
-        browser.element('#react-select-3-input').type(f'{state}').press_enter()
-
-    def city(self, city):
-        browser.element('#react-select-4-input').type(f'{city}').press_enter()
-
-    def submit(self):
+        browser.element('.react-datepicker__year-select').click().element(f'option[value="{user.year_birth}"]').click()
+        browser.element('.react-datepicker__month-select').click().element(f'option[value="{user.month_birth}"]').click()
+        browser.element(f'.react-datepicker__day--0{user.day_birth}').click()
+        browser.element('#subjectsInput').type(f'{user.first_subject}').press_enter().type(f'{user.second_subject}').press_enter()
+        browser.element('label[for="hobbies-checkbox-1"]').click()
+        browser.element('label[for="hobbies-checkbox-2"]').click()
+        browser.element('#uploadPicture').set_value(path_name(user.photo))
+        browser.element('#currentAddress').type(user.current_address).press_enter()
+        browser.element('#react-select-3-input').type(user.state).press_enter()
+        browser.element('#react-select-4-input').type(user.city).press_enter()
         browser.element('#submit').press_enter()
 
-    def should_have_inside(self, full_name, email, gender, phone, subjects, birth_date, file_name, address, state_city,
-                          hobbies):
+    def should_be(self, user: User):
         (browser.element('tbody').all('tr td:nth-child(2)')
-         .should(have.texts(full_name, email,
-                            gender, phone, birth_date,
-                            subjects,
-                            hobbies,
-                            file_name,
-                            address,
-                            state_city)))
+         .should(have.texts(f'{user.first_name} {user.last_name}',
+                            user.email,
+                            user.gender,
+                            user.phone,
+                            f"{user.day_birth.replace('0', '')} " f"{user.month_birth.replace('6', 'July')},{user.year_birth}",
+                            f'{user.first_subject}, {user.second_subject}',
+                            user.hobbies,
+                            user.photo,
+                            user.current_address,
+                            f'{user.state} {user.city}')))
